@@ -1,0 +1,55 @@
+<app-alert [styles]="alertStyles" [show]="showAlert">
+  {{ alertContent }}
+</app-alert>
+
+<!-- Login Form -->
+<form #loginForm="ngForm" (ngSubmit)="submit(loginForm)">
+  <!-- Email -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Email</label>
+    <input
+      type="email"
+      name="email"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      placeholder="Enter Email"
+      [(ngModel)]="credentials.email"
+      required
+      pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+      #email="ngModel"
+    />
+    <p
+      class="text-red-400"
+      *ngIf="email.errors && email['dirty'] && email.touched"
+    >
+      Invalid email address.
+    </p>
+  </div>
+  <!-- Password -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Password</label>
+    <input
+      type="password"
+      class="block w-full py-1.5 px-3 text-gray-200 border border-gray-400 transition duration-500 focus:outline-none rounded bg-transparent focus:border-indigo-400"
+      name="password"
+      placeholder="Password"
+      [(ngModel)]="credentials.password"
+      required
+      #password="ngModel"
+    />
+    <p class="text-red-400" *ngIf="password.errors && password.touched">
+      Please fill the password
+    </p>
+  </div>
+  <button
+    type="submit"
+    [ngClass]="{
+      'block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition': true,
+      'hover:bg-indigo-500 cursor-pointer opacity-100': loginForm.valid,
+      'disabled: opacity-50 disabled:bg-indigo-400 cursor-not-allowed':
+        !loginForm.valid
+    }"
+    [disabled]="!loginForm.valid"
+  >
+    Submit
+  </button>
+</form>
