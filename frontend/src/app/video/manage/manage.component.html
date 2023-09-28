@@ -3,7 +3,7 @@
 <!-- Top Bar -->
 <section class="container mx-auto my-8 bg-secondary p-6">
   <div class="rounded relative flex justify-between">
-    <a href="#" class="bg-indigo-400 text-white py-4 px-10 text-xl"
+    <a routerLink="/upload" class="bg-indigo-400 text-white py-4 px-10 text-xl"
       >Upload Videos</a
     >
 
@@ -67,4 +67,7 @@
   </div>
 </div>
 
-<app-edit></app-edit>
+<app-edit
+  [activeEditingClip]="activeEditingClip"
+  (updateParent)="updateClip($event)"
+></app-edit>

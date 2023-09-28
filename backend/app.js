@@ -154,6 +154,19 @@ app.delete("/videos/:videoId", async (req, res) => {
       res.send({ success: false });
     });
 });
+// update a video:
+app.post("/videos/update/:id", async (req, res) => {
+  const videoId = req.params.id;
+
+  videoModule
+    .updateVideo(videoId, req.body.clip)
+    .then(() => {
+      res.send({ updated: true });
+    })
+    .catch(() => {
+      res.send({ updated: false });
+    });
+});
 
 // *****Starting Server*****
 app.listen(port, (error) => {

@@ -23,7 +23,13 @@
       >
         <h5>Drop your file here (mp4 only!)</h5>
       </div>
-      <input type="file" class="mt-4" (change)="storeFile($event)" />
+      <input
+        type="file"
+        class="mt-4"
+        [multiple]="false"
+        accept="video/mp4"
+        (change)="storeFile($event)"
+      />
     </ng-container>
 
     <!-- Video Editor -->

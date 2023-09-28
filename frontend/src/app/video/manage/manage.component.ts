@@ -18,7 +18,7 @@ export class ManageComponent implements OnInit {
   ) {}
 
   videoOrder: string = '1';
-  un: any;
+  activeEditingClip: null | any = null; // clip which is being edited
   videos!: any[];
 
   async ngOnInit() {
@@ -68,6 +68,20 @@ export class ManageComponent implements OnInit {
   }
 
   editClip(event: Event, clip: any) {
+    this.activeEditingClip = clip;
+
     this.modelService.toggleModel('edit-clip');
+  }
+
+  updateClip(event: any) {
+    let index = 0;
+
+    for (let video of this.videos) {
+      if (video._id === event._id) {
+        this.videos[index].title = event.title;
+        break;
+      }
+      index++;
+    }
   }
 }

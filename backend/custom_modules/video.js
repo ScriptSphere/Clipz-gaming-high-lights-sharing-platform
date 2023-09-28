@@ -69,6 +69,18 @@ class vidUtils {
         });
     });
   }
+
+  updateVideo(vidId, newData) {
+    return new Promise(async (resolve, reject) => {
+      this.VideoModel.findByIdAndUpdate({ _id: vidId }, newData, { new: true })
+        .then(() => {
+          resolve();
+        })
+        .catch(() => {
+          reject();
+        });
+    });
+  }
 }
 
 module.exports = new vidUtils();

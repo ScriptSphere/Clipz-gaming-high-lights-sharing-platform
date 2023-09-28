@@ -62,4 +62,23 @@ export class ClipsService {
         });
     });
   }
+
+  updateClip(id: string, clip: any) {
+    return new Promise<void>((resolve, reject) => {
+      this.http
+        .post(`${environment.serverUrl}/videos/update/${id}`, { clip: clip })
+        .subscribe({
+          next: (res: any) => {
+            if (res.updated) {
+              resolve();
+            } else {
+              reject();
+            }
+          },
+          error: () => {
+            reject();
+          },
+        });
+    });
+  }
 }

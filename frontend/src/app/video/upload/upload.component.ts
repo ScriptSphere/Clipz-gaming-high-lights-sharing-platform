@@ -2,12 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { OnDestroy } from '@angular/core';
-import {
-  HttpClient,
-  HttpEventType,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
