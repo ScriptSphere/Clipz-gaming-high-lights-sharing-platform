@@ -27,10 +27,10 @@
       *ngFor="let video of videos"
     >
       <!-- Image -->
-      <a href="#">
+      <a [routerLink]="'/clip/' + video._id">
         <img
           class="card-img-top rounded-tl-2xl w-full"
-          src="assets/img/1.jpg"
+          [src]="video.thumbnail"
         />
       </a>
 

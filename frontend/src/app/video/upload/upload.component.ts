@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { OnDestroy } from '@angular/core';
 import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { FfmpegService } from 'src/app/services/ffmpeg.service';
 
 @Component({
   selector: 'app-upload',
@@ -35,7 +35,16 @@ export class UploadComponent implements OnDestroy {
 
   networkSubscription: Subscription | null = null;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  screenshots: string[] = [];
+  selectedScreenshot: string = '';
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    public ffmpegService: FfmpegService
+  ) {
+    this.ffmpegService.init();
+  }
 
   ngOnDestroy(): void {
     if (this.networkSubscription) {
@@ -43,7 +52,11 @@ export class UploadComponent implements OnDestroy {
     }
   }
 
-  storeFile(event: Event) {
+  async storeFile(event: Event) {
+    if (this.ffmpegService.isRunning) {
+      return;
+    }
+
     this.isDragOver = false;
     this.file = (event as DragEvent).dataTransfer
       ? (event as DragEvent).dataTransfer?.files[0] ?? null
@@ -53,6 +66,9 @@ export class UploadComponent implements OnDestroy {
       return;
     }
 
+    this.screenshots = await this.ffmpegService.getScreenshots(this.file);
+    this.selectedScreenshot = this.screenshots[0];
+
     this.videoForm.controls['title'].setValue(
       this.file.name.replace(/\.[^\.]+$/, '')
     );
@@ -61,26 +77,27 @@ export class UploadComponent implements OnDestroy {
     this.showForm = true;
   }
 
-  uploadFile() {
+  async uploadFile() {
     // disable the form:
     this.videoForm.disable();
+
+    const screenshotBlob = await this.ffmpegService.blobFromURL(
+      this.selectedScreenshot
+    );
 
     this.inSubmition = true;
 
     const formData: FormData = new FormData();
+
     formData.append('video', this.file as File);
     formData.append('title', this.titleControl.value as string);
+    formData.append('thumbnail', new File([screenshotBlob], 'thumbnaii.png'));
 
-    const req = new HttpRequest(
-      'POST',
-      `${environment.serverUrl}/videos/upload`,
-      formData,
-      {
-        reportProgress: true,
-        withCredentials: true,
-        responseType: 'json',
-      }
-    );
+    const req = new HttpRequest('POST', `/videos/upload`, formData, {
+      reportProgress: true,
+      withCredentials: true,
+      responseType: 'json',
+    });
 
     this.networkSubscription = this.http.request(req).subscribe({
       next: (event: any) => {

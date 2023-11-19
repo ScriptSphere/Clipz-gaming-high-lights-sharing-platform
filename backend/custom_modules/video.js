@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 const { UserModel } = require("./user");
+const fs = require("fs");
+const path = require("path");
 
 class vidUtils {
   // Video Schema:
   videoSchema = new mongoose.Schema({
     title: { required: true, type: String },
     filePath: { required: true, type: String },
+    thumbnail: { required: true, type: String },
     owner: { required: true, type: String },
     ownerName: { required: true, type: String },
     uploadDate: { default: new Date(), required: true, type: Date },
@@ -59,7 +62,15 @@ class vidUtils {
   }
 
   deleteVideo(vidId) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+      const video = await this.VideoModel.findOne({ _id: vidId });
+
+      // deleting video:
+      fs.unlinkSync(path.join(__dirname, `../public/${video.filePath}`));
+
+      // deleting video:
+      fs.unlinkSync(path.join(__dirname, `../public/${video.thumbnail}`));
+
       this.VideoModel.deleteOne({ _id: vidId })
         .then(() => {
           resolve();

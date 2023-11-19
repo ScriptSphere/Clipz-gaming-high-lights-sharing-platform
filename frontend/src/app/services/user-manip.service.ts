@@ -59,7 +59,7 @@ export class UserManipService {
   registerUser(userData: any) {
     return new Promise<void>((resolve, reject) => {
       this.http
-        .post(`${environment.serverUrl}/register`, userData, {
+        .post(`/register`, userData, {
           responseType: 'text',
         })
         .subscribe({
@@ -83,7 +83,7 @@ export class UserManipService {
     return new Promise<void>((resolve, reject) => {
       this.http
         .post(
-          `${environment.serverUrl}/login`,
+          `/login`,
           {
             email: email,
             password: password,
@@ -118,7 +118,7 @@ export class UserManipService {
 
     return new Promise<void>((resolve, reject) => {
       this.http
-        .get(`${environment.serverUrl}/logout`, {
+        .get(`/logout`, {
           responseType: 'json',
           withCredentials: true,
         })
@@ -152,17 +152,14 @@ export class UserManipService {
     }
 
     return new Promise<any>((resolve, reject) => {
-      this.http
-        .post(`${environment.serverUrl}/email-taken`, { email: email })
-        .subscribe({
-          next: (res) => {
-            console.log(res);
-            resolve((res as resFormat).taken);
-          },
-          error: () => {
-            reject();
-          },
-        });
+      this.http.post(`/email-taken`, { email: email }).subscribe({
+        next: (res) => {
+          resolve((res as resFormat).taken);
+        },
+        error: () => {
+          reject();
+        },
+      });
     });
   }
 }

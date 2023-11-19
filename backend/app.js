@@ -16,12 +16,21 @@ const videoModule = require("./custom_modules/video");
 // *****File Uploads*****
 const videoStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/videos");
+    if (file.fieldname === "video") {
+      cb(null, "./public/videos");
+    } else if (file.fieldname === "thumbnail") {
+      cb(null, "./public/thumbnails");
+    }
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + ".mp4");
+    if (file.fieldname === "thumbnail") {
+      cb(null, Date.now() + ".png");
+    } else if (file.fieldname === "video") {
+      cb(null, Date.now() + ".mp4");
+    }
   },
 });
+
 const videoUpload = multer({ storage: videoStorage });
 
 // *****Global variables*****
@@ -100,20 +109,34 @@ app.post("/email-taken", async (req, res) => {
   res.send({ taken: emailTaken });
 });
 // upload video
-app.post("/videos/upload", videoUpload.single("video"), async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", process.env.frontend_url);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+app.post(
+  "/videos/upload",
+  videoUpload.fields([
+    {
+      name: "video",
+      maxCount: 1,
+    },
+    {
+      name: "thumbnail",
+      maxCount: 1,
+    },
+  ]),
+  async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", process.env.frontend_url);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
 
-  const clipId = await videoModule.add({
-    title: req.body.title,
-    filePath: `/videos/${req.file.filename}`,
-    owner: jwt.verify(req.signedCookies.clipzuser, process.env.secrate_key)
-      .userId,
-  });
+    const clipId = await videoModule.add({
+      title: req.body.title,
+      filePath: `/videos/${req.files.video[0].filename}`,
+      owner: jwt.verify(req.signedCookies.clipzuser, process.env.secrate_key)
+        .userId,
+      thumbnail: `/thumbnails/${req.files.thumbnail[0].filename}`,
+    });
 
-  if (clipId) res.send({ clipId: clipId });
-  else res.sendStatus(500);
-});
+    if (clipId) res.send({ clipId: clipId });
+    else res.sendStatus(500);
+  }
+);
 // view a video:
 app.get("/videos/:id", async (req, res) => {
   const video = await videoModule.get(req.params.id);

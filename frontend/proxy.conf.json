@@ -1,0 +1,26 @@
+{
+  "/login": {
+    "target": "http://localhost:550",
+    "secure": false
+  },
+  "/email-taken": {
+    "target": "http://localhost:550",
+    "secure": false
+  },
+  "/register": {
+    "target": "http://localhost:550",
+    "secure": false
+  },
+  "/logout": {
+    "target": "http://localhost:550",
+    "secure": false
+  },
+  "/videos": {
+    "target": "http://localhost:550",
+    "secure": false
+  },
+  "/thumbnails": {
+    "target": "http://localhost:550",
+    "secure": false
+  }
+}

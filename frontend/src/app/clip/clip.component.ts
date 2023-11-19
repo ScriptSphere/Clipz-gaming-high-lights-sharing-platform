@@ -25,7 +25,6 @@ export class ClipComponent implements OnInit {
       .fetchClip(this.id)
       .then((clip) => {
         this.video = clip;
-        console;
       })
       .catch((error) => {
         console.log(error);

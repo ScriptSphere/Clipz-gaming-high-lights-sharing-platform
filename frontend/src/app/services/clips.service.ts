@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { environment } from 'src/environments/environment';
-
 import { UserManipService } from './user-manip.service';
 
 @Injectable({
@@ -16,28 +14,27 @@ export class ClipsService {
 
   fetchClip(id: string) {
     return new Promise<any>((resolve, reject) => {
-      this.http
-        .get(`${environment.serverUrl}/videos/${id}`, { responseType: 'json' })
-        .subscribe({
-          next: (response: any) => {
-            resolve(response);
-          },
-          error: (error) => {
-            console.log(error);
-            reject();
-          },
-        });
+      this.http.get(`/videos/${id}`, { responseType: 'json' }).subscribe({
+        next: (response: any) => {
+          resolve(response);
+        },
+        error: (error) => {
+          console.log(error);
+          reject();
+        },
+      });
     });
   }
 
   fetchManyClips(sort: number) {
     return new Promise((resolve, reject) => {
       this.http
-        .get(`${environment.serverUrl}/videos/uploads/${sort}`, {
+        .get(`/videos/uploads/${sort}`, {
           withCredentials: true,
         })
         .subscribe((response: any) => {
           if (response) {
+            console.log(response);
             resolve(response);
           } else {
             reject(false);
@@ -49,7 +46,7 @@ export class ClipsService {
   deleteClip(clipId: string) {
     return new Promise<void>((resolve, reject) => {
       this.http
-        .delete(`${environment.serverUrl}/videos/${clipId}`, {
+        .delete(`/videos/${clipId}`, {
           responseType: 'json',
           withCredentials: true,
         })
@@ -65,20 +62,18 @@ export class ClipsService {
 
   updateClip(id: string, clip: any) {
     return new Promise<void>((resolve, reject) => {
-      this.http
-        .post(`${environment.serverUrl}/videos/update/${id}`, { clip: clip })
-        .subscribe({
-          next: (res: any) => {
-            if (res.updated) {
-              resolve();
-            } else {
-              reject();
-            }
-          },
-          error: () => {
+      this.http.post(`/videos/update/${id}`, { clip: clip }).subscribe({
+        next: (res: any) => {
+          if (res.updated) {
+            resolve();
+          } else {
             reject();
-          },
-        });
+          }
+        },
+        error: () => {
+          reject();
+        },
+      });
     });
   }
 }
