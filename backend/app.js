@@ -190,6 +190,21 @@ app.post("/videos/update/:id", async (req, res) => {
       res.send({ updated: false });
     });
 });
+// get videos for infinite scrolling:
+app.get("/videos", async (req, res) => {
+  const videos = await videoModule.getMany(
+    Number(req.query.videosNumber),
+    Number(req.query.videosSkipNumber)
+  );
+
+  console.log(videos);
+
+  if (videos) {
+    res.send(JSON.stringify(videos));
+  } else {
+    res.sendStatus(500);
+  }
+});
 
 // *****Starting Server*****
 app.listen(port, (error) => {

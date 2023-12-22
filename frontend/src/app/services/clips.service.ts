@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { UserManipService } from './user-manip.service';
+import {
+  Resolve,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ClipsService {
-  constructor(
-    private http: HttpClient,
-    private userService: UserManipService
-  ) {}
+export class ClipsService implements Resolve<any> {
+  constructor(private http: HttpClient) {}
 
   fetchClip(id: string) {
     return new Promise<any>((resolve, reject) => {
@@ -75,5 +75,30 @@ export class ClipsService {
         },
       });
     });
+  }
+
+  fetchClipsForInfiniteScroll(clips: number, skip: number) {
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(`/videos?videosNumber=${clips}&videosSkipNumber=${skip}`, {
+          withCredentials: true,
+          responseType: 'json',
+        })
+        .subscribe({
+          next: (videos) => {
+            resolve(videos);
+          },
+          error: (err) => {
+            console.log(err);
+            reject();
+          },
+        });
+    });
+  }
+
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    let id = route.params['id'];
+
+    return this.fetchClip(id);
   }
 }

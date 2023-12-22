@@ -5,11 +5,11 @@
   <div class="rounded relative flex flex-col">
     <div class="font-bold mb-6">Upload Video</div>
 
-    <ng-template *ngIf="!ffmpegService.isReady; else uploadEditorCtr">
-      <span class="material-icons text-center text-6xl p-8 animate-spin"
-        >autorenew</span
-      >
-    </ng-template>
+    <span
+      *ngIf="!ffmpegService.isReady; else uploadEditorCtr"
+      class="material-icons text-center text-6xl p-5 animate-spin"
+      >autorenew</span
+    >
 
     <ng-template #uploadEditorCtr>
       <ng-container>

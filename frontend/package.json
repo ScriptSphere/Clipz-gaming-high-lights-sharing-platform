@@ -21,9 +21,12 @@
     "@ffmpeg/core": "^0.12.4",
     "@ffmpeg/ffmpeg": "^0.11.6",
     "@types/node": "^20.9.0",
+    "@types/video.js": "^7.3.56",
+    "@videojs/themes": "^1.0.1",
     "ngx-mask": "^14.2.4",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "video.js": "^8.6.1",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

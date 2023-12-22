@@ -92,6 +92,23 @@ class vidUtils {
         });
     });
   }
+
+  // this function will return many clips reguardless of who uploaded it
+  getMany(clipsNum, skipNum) {
+    return new Promise(async (resolve, reject) => {
+      const clips = await this.VideoModel.find()
+        .sort({ uploadDate: -1 })
+        .skip(skipNum)
+        .limit(clipsNum)
+        .exec();
+
+      if (clips) {
+        resolve(clips);
+      } else {
+        reject(false);
+      }
+    });
+  }
 }
 
 module.exports = new vidUtils();
