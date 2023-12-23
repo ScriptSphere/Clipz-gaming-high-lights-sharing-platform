@@ -8,8 +8,7 @@ import { NavComponent } from './nav/nav.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { VideoModule } from './video/video.module';
+import { AboutComponent } from './about/about.component'; 
 import { ClipComponent } from './clip/clip.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ClipsListComponent } from './clips-list/clips-list.component';
@@ -28,7 +27,6 @@ import { ClipsListComponent } from './clips-list/clips-list.component';
     BrowserModule,
     UserModule,
     HttpClientModule,
-    VideoModule,
     AppRoutingModule,
     SharedModule,
   ],
