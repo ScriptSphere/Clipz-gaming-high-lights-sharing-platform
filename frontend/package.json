@@ -6,7 +6,10 @@
     "start": "ng serve --proxy-config ./proxy.conf.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "ng e2e --port=4200 --proxy-config=./proxy.conf.json",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -33,7 +36,9 @@
     "@angular-devkit/build-angular": "^14.0.0",
     "@angular/cli": "~14.0.0",
     "@angular/compiler-cli": "^14.0.0",
+    "@cypress/schematic": "^2.0.0",
     "@types/jasmine": "~4.0.0",
+    "cypress": "^13.6.3",
     "jasmine-core": "~4.1.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

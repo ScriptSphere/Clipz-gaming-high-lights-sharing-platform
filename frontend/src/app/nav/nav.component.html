@@ -54,7 +54,8 @@
         <li>
           <a
             class="px-2"
-            (click)="logoutUser($event)"
+            (click)="logoutUser()"
+            id="logoutLink"
             *ngIf="userScrvice.loggedIn"
             >logout</a
           >

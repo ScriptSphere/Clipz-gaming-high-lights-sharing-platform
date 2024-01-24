@@ -17,10 +17,12 @@ export class NavComponent implements OnInit {
   alertContent!: string;
   alertStyles: string = 'bg-green-500 text-white';
 
-  async logoutUser(event: Event) {
-    event.preventDefault();
+  logoutUser() {
+    console.log('click handler triggerred');
 
     this.userScrvice.logoutUser();
+
+    return false;
   }
 
   ngOnInit(): void {}

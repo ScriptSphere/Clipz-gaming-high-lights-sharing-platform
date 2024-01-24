@@ -140,7 +140,6 @@ app.post(
 // view a video:
 app.get("/videos/:id", async (req, res) => {
   const video = await videoModule.get(req.params.id);
-  video.password = null;
 
   if (video) {
     res.send(video).status(200);
@@ -196,8 +195,6 @@ app.get("/videos", async (req, res) => {
     Number(req.query.videosNumber),
     Number(req.query.videosSkipNumber)
   );
-
-  console.log(videos);
 
   if (videos) {
     res.send(JSON.stringify(videos));

@@ -9,18 +9,40 @@ import { ClipsService } from '../services/clips.service';
 export class ClipsListComponent implements OnInit, OnDestroy {
   @Input() scrollable: boolean = true;
 
-  constructor(private clipsService: ClipsService) {
-    this.pendingRequest = true;
-    this.loadVideos().then(() => {
-      this.pendingRequest = false;
-    });
-  }
+  constructor(private clipsService: ClipsService) {}
 
-  videosNumber: number = 6;
-  videosSkip: number = 0;
+  @Input() videosNumber: number = 6;
+
+  loadedOnce: boolean = false; // this means that first set of videos have been loaded
+
+  videosSkipNum: number = 0;
+  @Input() set videosSkip(skip: number) {
+    this.videosSkipNum = skip;
+
+    if (this.loadedOnce) {
+      this.videos = [];
+      this.pendingRequest = true;
+      this.loadVideos().then(() => {
+        this.pendingRequest = false;
+      });
+    }
+  }
+  @Input() load: boolean = false;
   videos: any[] = [];
 
   pendingRequest: boolean = false;
+
+  loadInterval = setInterval(() => {
+    if (this.load) {
+      this.pendingRequest = true;
+      this.loadVideos().then(() => {
+        this.pendingRequest = false;
+        this.loadedOnce = true; // first set of videos loaded
+      });
+
+      clearInterval(this.loadInterval);
+    }
+  }, 500);
 
   async ngOnInit() {
     if (this.scrollable) {
@@ -56,7 +78,7 @@ export class ClipsListComponent implements OnInit, OnDestroy {
     this.videos.push(
       ...((await this.clipsService.fetchClipsForInfiniteScroll(
         this.videosNumber,
-        this.videosSkip
+        this.videosSkipNum
       )) as Array<any>)
     );
   };

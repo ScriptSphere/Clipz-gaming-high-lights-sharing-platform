@@ -40,7 +40,21 @@ class vidUtils {
     const video = await this.VideoModel.findOne({ _id: id });
 
     if (video) {
-      return video;
+      let videoWithIndex = await this.VideoModel.find().sort({
+        uploadDate: -1,
+      });
+      let vidIndex = 0;
+      videoWithIndex = videoWithIndex
+        .filter((vid, index, arr) => {
+          if (vid.filePath == video.filePath) vidIndex = index;
+
+          return vid.filePath == video.filePath;
+        })[0]
+        .toObject();
+
+      videoWithIndex.index = vidIndex;
+
+      return videoWithIndex;
     } else {
       return false;
     }
@@ -96,6 +110,7 @@ class vidUtils {
   // this function will return many clips reguardless of who uploaded it
   getMany(clipsNum, skipNum) {
     return new Promise(async (resolve, reject) => {
+      console.log(skipNum, clipsNum);
       const clips = await this.VideoModel.find()
         .sort({ uploadDate: -1 })
         .skip(skipNum)
@@ -103,6 +118,7 @@ class vidUtils {
         .exec();
 
       if (clips) {
+        console.log(clips);
         resolve(clips);
       } else {
         reject(false);
